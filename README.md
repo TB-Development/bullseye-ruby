@@ -1,5 +1,5 @@
 # bullseye-ruby
-Repository meant for storing Dockerfiles for a bullseye Container running Ruby
+Repository meant for storing Dockerfiles for a Bullseye Container running Ruby
 
 # Usage
 
