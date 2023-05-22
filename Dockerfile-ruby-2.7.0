@@ -1,0 +1,65 @@
+FROM debian:bullseye
+
+SHELL ["/bin/bash","-l","-c"]
+
+# Install dependencies
+RUN apt-get update
+RUN apt-get install -y \
+    nodejs \
+    ghostscript \
+    shared-mime-info \
+    openssl \
+    curl \
+    gnupg2 \
+    dirmngr \
+    git-core \
+    libcurl4-openssl-dev \
+    software-properties-common \
+    zlib1g-dev \
+    build-essential \
+    libssl-dev \
+    libreadline-dev \
+    libyaml-dev \
+    libsqlite3-dev \
+    sqlite3 \
+    libxml2-dev \
+    libxslt1-dev \
+    libffi-dev \
+    libpq-dev  \
+    libmagickcore-6.q16-dev \
+    libxml2-dev  \
+    libxslt-dev  \
+    unixodbc  \
+    unixodbc-dev  \
+    freetds-dev  \
+    freetds-bin  \
+    tdsodbc  \
+    locales  \
+    locales-all  \
+    nano
+
+# Install Nodejs from source
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -
+RUN apt-get install nodejs -y
+RUN curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+
+# Install yarn from source
+RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+RUN apt-get update -y
+RUN apt-get install yarn -y
+
+# Install rbenv & ruby-build
+RUN git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+RUN echo 'export PATH="~/.rbenv/bin:$PATH"' >> ~/.bashrc
+RUN echo 'eval "$(rbenv init -)"' >> ~/.bashrc
+
+RUN git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
+RUN echo 'export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"' >> ~/.bashrc
+RUN echo 'export PATH="$PATH:/usr/bin:/usr/local/bin/"' >> ~/.bash_rc
+
+RUN echo 'export RUBYOPT='-W:no-deprecated'' >> ~/.bash_rc
+
+# Install ruby
+RUN rbenv rehash
+RUN rbenv install 2.7.0
+RUN rbenv global 2.7.0
